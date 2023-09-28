@@ -9,12 +9,14 @@ import SwiftUI
 
 struct ColorCyclingCircle: View {
     var amount = 0.0
+    var startY = 0.0
+    var endY = 1.0
     var steps = 100
     
     var body: some View {
         ZStack {
             ForEach(0..<steps) { value in
-                Circle()
+                Rectangle()
                     .inset(by: Double(value))
                     .strokeBorder(
                         LinearGradient(
@@ -22,12 +24,11 @@ struct ColorCyclingCircle: View {
                                 color(for: value, brightness: 1),
                                 color(for: value, brightness: 0.5),
                             ]),
-                            startPoint: .top,
-                            endPoint: .bottom
+                            startPoint: UnitPoint(x: 0.5, y: startY),
+                            endPoint: UnitPoint(x: 0.5, y: endY)
                         ),
                         lineWidth: 2            
                     )
-
             }
         }
         .drawingGroup()
@@ -46,13 +47,17 @@ struct ColorCyclingCircle: View {
 
 struct ContentView: View {
     @State private var colorCycle = 0.0
+    @State private var startY = 0.0
+    @State private var endY = 1.0
     
     var body: some View {
         VStack {
-            ColorCyclingCircle(amount: colorCycle)
+            ColorCyclingCircle(amount: colorCycle, startY: startY, endY: endY)
                 .frame(width: 300, height: 300)
             
             Slider(value: $colorCycle)
+            Slider(value: $startY)
+            Slider(value: $endY)
         }
     }
 }
